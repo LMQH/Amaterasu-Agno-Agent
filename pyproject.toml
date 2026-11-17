@@ -1,0 +1,26 @@
+[project]
+name = "aaa"
+version = "0.0.0"
+description = "终端里的 Agno agent harness"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  # 只列 src/ 直接 import 的包；其余由 agno 的元数据提供。
+  # agno 的 openai / sqlalchemy / aiosqlite 都在 extra 里，裸 agno== 装不出可用环境。
+  "agno[openai,sqlite]==3.1.12",
+  # 压缩阈值按本地 token 计数；缺失时降级为字符数/4，中文低估 1.7–3×
+  "tiktoken==0.14.0",
+  "pyyaml==6.0.3",
+  "prompt_toolkit==3.0.53",
+  "questionary==2.1.1",
+]
+
+[tool.uv]
+# 锁文件以实测环境（2026-11-17，Python 3.13.12）为基线。下列传递依赖在纯解析时
+# 会被更新的发布版本取代，显式约束回实测版本，保证 uv.lock 与跑通测试的环境一致。
+constraint-dependencies = [
+  "openai==3.49.0",
+  "pydantic-settings==2.16.2",
+  "sqlalchemy==2.1.8",
+  "httpcore2==2.16.0",
+  "httpx2==2.16.0",
+]
